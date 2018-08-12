@@ -20,10 +20,11 @@
   </head>
   <body>
     <div id="map"></div>
+    <script type="text/javascript" src="results.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyOGwTqHXnU4xia8FCbGlF8FnE-LSU4Ns&libraries=visualization"></script>
     <script>
 
-      var sanFrancisco = new google.maps.LatLng(37.774546, -122.433523);
+      // var sanFrancisco = new google.maps.LatLng(37.774546, -122.433523);
       var shoreditch = new google.maps.LatLng(51.5253594,-0.0928388);
 
       var map = new google.maps.Map(document.getElementById('map'), {
@@ -31,15 +32,31 @@
         zoom: 15,
       });
 
-      var heatMapData = [
-        {location: new google.maps.LatLng(51.5259167,-0.088607), weight: 30},
-        {location: new google.maps.LatLng(51.5260926,-0.0884314), weight: 1},
-      ];
+      var heatmapData = results.map(function(result) { return { location: new google.maps.LatLng(result.Lat, result.Lng), weight: result.Price } } )
+
+      results.map(function(result) {
+          var title = result.Name + " – " + result.Price + " GBP"
+          var content = "<span>" + title + "</span>";
+          var infowindow = new google.maps.InfoWindow({
+              content: content
+          });
+
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(result.Lat, result.Lng),
+              map: map,
+              title: title
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map,marker);
+          });
+      })
 
       var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatMapData
+        data: heatmapData
       });
       heatmap.setMap(map);
+      heatmap.set('radius', 20);
     </script>
   </body>
 </html>
