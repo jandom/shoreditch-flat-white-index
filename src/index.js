@@ -23,14 +23,14 @@ const renderMap = (google) => {
   const prices = results.map(result => result.Price)
   const maxPrice = Math.max(...prices)
   const minPrice = Math.min(...prices)
-  console.log("prices=", prices, maxPrice, minPrice)
+  // console.log("prices=", prices, maxPrice, minPrice)
 
   const heatmapData = results.map(result =>  ({
     location: new google.maps.LatLng(result.Lat, result.Lng),
     weight: 100 * normalize(result.Price, minPrice, maxPrice)
   }))
 
-  console.log("heatmapData=", heatmapData)
+  // console.log("heatmapData=", heatmapData)
 
   const markers = results.map(result => {
     const title = result.Name + " – " + result.Price + " GBP"
